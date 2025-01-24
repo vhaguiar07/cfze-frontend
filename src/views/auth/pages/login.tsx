@@ -1,41 +1,58 @@
-import { useState } from 'react';
-import { loginUser } from '../../../api/authApi';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { loginUser, validateUser } from '../../../api/authApi';
+import { HOME } from '../../home/routes';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      try {
+        const user = await validateUser();
+        if (user) {
+          navigate(HOME());
+        }
+      } catch (error) {
+        console.log('Usuário não autenticado, continue para login.');
+      }
+    };
+
+    checkAuthentication();
+  }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await loginUser(username, password);
       alert('Login bem-sucedido');
-      window.location.href = '/profile';
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert('Ocorreu um erro desconhecido.');
-      }
+      navigate(HOME());
+    } catch (error) {
+      alert(error instanceof Error ? error.message : 'Erro desconhecido');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Usuário"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Senha"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button type="submit">Login</button>
-    </form>
+    <div>
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Usuário"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Entrar</button>
+      </form>
+    </div>
   );
 };
 
