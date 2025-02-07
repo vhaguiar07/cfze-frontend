@@ -6,6 +6,7 @@ import { HOME } from '../../home/routes';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,12 +26,16 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       await loginUser(username, password);
       alert('Login bem-sucedido');
       navigate(HOME());
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Erro desconhecido');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,7 +55,9 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Entrar</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Carregando...' : 'Entrar'}
+        </button>
       </form>
     </div>
   );

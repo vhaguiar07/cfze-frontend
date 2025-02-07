@@ -1,0 +1,36 @@
+/* acidentes.css */
+.acidentes-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.acidentes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.acidentes-table th,
+.acidentes-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.acidentes-table th {
+  background-color: #f4f4f4;
+}
+
+.acidentes-button {
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.acidentes-button:hover {
+  background-color: #0056b3;
+}
