@@ -17,6 +17,7 @@ export const createAccident = async (accidentData: any) => {
 
 export const updateAccident = async (accidentId: string, accidentData: any) => {
   try {
+    console.log("📦 Dados enviados:", accidentData);
     const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/accident-control/update/${accidentId}`, accidentData, {
       withCredentials: true,
     });
