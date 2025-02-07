@@ -46,6 +46,21 @@ export const listAccidents = async (page = 1, limit = 10, sortBy = 'createdAt', 
   }
 };
 
+export const searchAccidentsByEmployeeName = async (fullName: string, page = 1, limit = 10) => {
+  try {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BACKEND_URL}/accident-control/search`,
+      { params: { fullName, page, limit }, withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "Erro ao buscar acidentes");
+    }
+    throw new Error("Erro desconhecido");
+  }
+};
+
 export const createAccidentCost = async (accidentCostData: any) => {
   try {
     const response = await axios.post(
