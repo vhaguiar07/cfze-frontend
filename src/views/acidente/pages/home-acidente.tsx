@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CADASTRO_ACIDENTE, CADASTRO_CUSTO_ACIDENTE, ACIDENTE } from '../routes';
+import { CADASTRO_CUSTO_ACIDENTE } from '../routes';
 
 const HomeAcidente = () => {
   const navigate = useNavigate();
@@ -8,14 +8,8 @@ const HomeAcidente = () => {
   return (
     <div style={styles.container}>
       <h1>Gestão de Acidentes</h1>
-      <button style={styles.button} onClick={() => navigate(CADASTRO_ACIDENTE())}>
-        Cadastrar Acidente
-      </button>
       <button style={styles.button} onClick={() => navigate(CADASTRO_CUSTO_ACIDENTE())}>
         Cadastrar Custo do Acidente
-      </button>
-      <button style={styles.button} onClick={() => navigate(ACIDENTE())}>
-        Listar Acidentes
       </button>
     </div>
   );

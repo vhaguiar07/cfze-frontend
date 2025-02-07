@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { listAccidents, searchAccidentsByEmployeeName } from "../../../api/acidenteApi";
 import AccidentDetailsModal from "../../../components/modal/AccidentDetailsModal";
+import AccidentCreateModal from "../../../components/modal/AccidentCreateModal";
 import { Accident } from "../../../interfaces/accident-interface";
 import "./css/acidentes.css";
 
@@ -8,6 +9,7 @@ const Acidentes = () => {
   const [accidents, setAccidents] = useState<Accident[]>([]);
   const [selectedAccident, setSelectedAccident] = useState<Accident | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const [page, setPage] = useState(1);
@@ -55,11 +57,24 @@ const Acidentes = () => {
     setSelectedAccident(null);
   };
 
+  const openCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const closeCreateModal = () => {
+    setIsCreateModalOpen(false);
+    fetchAccidents();
+  };
+
   return (
     <div className="acidentes-container">
-      <h2>Lista de Acidentes</h2>
+      <div className="acidentes-header">
+        <h2>Lista de Acidentes</h2>
+        <button className="acidentes-button cadastrar-acidente" onClick={openCreateModal}>
+          Cadastrar Acidente
+        </button>
+      </div>
 
-      {/* Campo de busca */}
       <div className="search-container">
         <input
           type="text"
@@ -99,7 +114,6 @@ const Acidentes = () => {
             </tbody>
           </table>
 
-          {/* Paginação */}
           <div className="pagination">
             <button disabled={page === 1} onClick={() => setPage(page - 1)}>
               Anterior
@@ -117,6 +131,8 @@ const Acidentes = () => {
       {isModalOpen && selectedAccident && (
         <AccidentDetailsModal accident={selectedAccident} onClose={closeModal} />
       )}
+
+      {isCreateModalOpen && <AccidentCreateModal onClose={closeCreateModal} />}
     </div>
   );
 };
