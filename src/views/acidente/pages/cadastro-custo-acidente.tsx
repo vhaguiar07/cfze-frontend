@@ -37,7 +37,7 @@ const CadastroCustoAcidente = () => {
 
       const formattedData = {
         ...formData,
-        leaveStartDate: formData.leaveStartDate ? new Date(formData.leaveStartDate).toISOString() : null, // ✅ Converte para ISO-8601
+        leaveStartDate: formData.leaveStartDate ? new Date(formData.leaveStartDate).toISOString() : null,
         totalCost,
       };
 

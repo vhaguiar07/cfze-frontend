@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { updateAccident } from "../../api/acidenteApi";
-import { UpdateAccidentControl } from "../../interfaces/accident-interface"; 
+import { updateAccident } from "../../../api/acidenteApi";
+import { UpdateAccidentControl } from "../../../interfaces/accident-interface"; 
 import "./css/AccidentDetailsModal.css";
 
 interface AccidentDetailsModalProps {

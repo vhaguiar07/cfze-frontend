@@ -17,7 +17,6 @@ export const createAccident = async (accidentData: any) => {
 
 export const updateAccident = async (accidentId: string, accidentData: any) => {
   try {
-    console.log("📦 Dados enviados:", accidentData);
     const response = await axios.patch(`${process.env.REACT_APP_BACKEND_URL}/accident-control/update/${accidentId}`, accidentData, {
       withCredentials: true,
     });
@@ -106,6 +105,21 @@ export const listAccidentCosts = async (page = 1, limit = 10, sortBy = 'createdA
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || 'Erro ao listar custos de acidentes');
+    } else {
+      throw new Error('Erro desconhecido');
+    }
+  }
+};
+
+export const getAccidentCostById = async (id: string) => {
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/accident-cost/findOne/${id}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || 'Erro ao buscar custo do acidente');
     } else {
       throw new Error('Erro desconhecido');
     }

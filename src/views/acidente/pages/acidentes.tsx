@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { listAccidents, searchAccidentsByEmployeeName } from "../../../api/acidenteApi";
-import AccidentDetailsModal from "../../../components/modal/AccidentDetailsModal";
-import AccidentCreateModal from "../../../components/modal/AccidentCreateModal";
+import AccidentDetailsModal from "../../../components/modal/acidente/AccidentDetailsModal";
+import AccidentCreateModal from "../../../components/modal/acidente/AccidentCreateModal";
+import CreateAccidentCostModal from "../../../components/modal/acidente/CreateAccidentCostModal";
+import ViewAccidentCostModal from "../../../components/modal/acidente/ViewAccidentCostModal";
 import { Accident } from "../../../interfaces/accident-interface";
 import "./css/acidentes.css";
 
@@ -10,6 +12,11 @@ const Acidentes = () => {
   const [selectedAccident, setSelectedAccident] = useState<Accident | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCostModalOpen, setIsCostModalOpen] = useState(false);
+  const [isViewCostModalOpen, setIsViewCostModalOpen] = useState(false);
+  const [selectedAccidentId, setSelectedAccidentId] = useState<string | null>(null);  
+  const [selectedAccidentForCost, setSelectedAccidentForCost] = useState<Accident | null>(null);
+  
   const [isLoading, setIsLoading] = useState(true);
 
   const [page, setPage] = useState(1);
@@ -66,6 +73,26 @@ const Acidentes = () => {
     fetchAccidents();
   };
 
+  const openCostModal = (accident: Accident) => {
+    setSelectedAccidentForCost(accident);
+    setIsCostModalOpen(true);
+  };
+
+  const closeCostModal = () => {
+    setIsCostModalOpen(false);
+    setSelectedAccidentForCost(null);
+  };
+
+  const openViewCostModal = (accidentId: string) => {
+    setSelectedAccidentId(accidentId);
+    setIsViewCostModalOpen(true);
+  };
+
+  const closeViewCostModal = () => {
+    setIsViewCostModalOpen(false);
+    setSelectedAccidentId(null);
+  };
+
   return (
     <div className="acidentes-container">
       <div className="acidentes-header">
@@ -99,19 +126,31 @@ const Acidentes = () => {
               </tr>
             </thead>
             <tbody>
-              {accidents.map((accident) => (
-                <tr key={accident.id}>
-                  <td>{accident.employee.fullName}</td>
-                  <td>{accident.jobTitle}</td>
-                  <td>{accident.daysAway}</td>
-                  <td>
-                    <button className="acidentes-button" onClick={() => openModal(accident)}>
-                      Visualizar Detalhes
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+  {accidents.map((accident) => (
+    <tr key={accident.id}>
+      <td>{accident.employee.fullName}</td>
+      <td>{accident.jobTitle}</td>
+      <td>{accident.daysAway}</td>
+      <td>
+        <button className="acidentes-button" onClick={() => openModal(accident)}>
+          Visualizar Detalhes
+        </button>
+
+        {/* Exibe "Adicionar Custos" apenas se o acidente ainda não tiver custos cadastrados */}
+        {!accident.accidentCost && (
+          <button className="acidentes-button editar-custos" onClick={() => openCostModal(accident)}>
+            Adicionar Custos
+          </button>
+        )}
+
+        <button className="acidentes-button visualizar-custos" onClick={() => openViewCostModal(accident.id)}>
+          Visualizar Custos
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
           </table>
 
           <div className="pagination">
@@ -129,7 +168,24 @@ const Acidentes = () => {
       )}
 
       {isModalOpen && selectedAccident && (
-        <AccidentDetailsModal accident={selectedAccident} onClose={closeModal} />
+        <AccidentDetailsModal
+          accident={selectedAccident}
+          onClose={closeModal}
+        />
+      )}
+      {isCostModalOpen && selectedAccidentForCost && (
+        <CreateAccidentCostModal
+          isOpen={isCostModalOpen}
+          onClose={closeCostModal}
+          accident={selectedAccidentForCost}
+        />
+      )}
+      {isViewCostModalOpen && selectedAccidentId && (
+        <ViewAccidentCostModal
+          isOpen={isViewCostModalOpen}
+          onClose={closeViewCostModal}
+          accidentId={selectedAccidentId}
+        />
       )}
 
       {isCreateModalOpen && <AccidentCreateModal onClose={closeCreateModal} />}

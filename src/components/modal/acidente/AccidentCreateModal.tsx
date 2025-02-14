@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createAccident } from "../../api/acidenteApi";
+import { createAccident } from "../../../api/acidenteApi";
 import "./css/AccidentCreateModal.css";
 
 interface AccidentCreateModalProps {
