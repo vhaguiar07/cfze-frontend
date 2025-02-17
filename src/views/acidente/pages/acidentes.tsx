@@ -98,10 +98,10 @@ const Acidentes = () => {
   };
 
   return (
-    <div className="acidentes-container">
-      <div className="acidentes-header">
+    <div className="container">
+      <div className="header">
         <h2>Lista de Acidentes</h2>
-        <button className="acidentes-button cadastrar-acidente" onClick={openCreateModal}>
+        <button className="button cadastrar-acidente" onClick={openCreateModal}>
           Cadastrar Acidente
         </button>
       </div>
@@ -118,7 +118,7 @@ const Acidentes = () => {
         <p>Carregando...</p>
       ) : accidents.length > 0 ? (
         <>
-          <table className="acidentes-table">
+          <table className="table">
             <thead>
               <tr>
                 <th>Nome do Funcionário</th>
@@ -134,15 +134,15 @@ const Acidentes = () => {
                   <td>{accident.jobTitle}</td>
                   <td>{accident.daysAway}</td>
                   <td>
-                    <button className="acidentes-button" onClick={() => openModal(accident)}>
+                    <button className="button" onClick={() => openModal(accident)}>
                       Visualizar Detalhes
                     </button>
                     {!accident.accidentCost && (
-                      <button className="acidentes-button editar-custos" onClick={() => openCostModal(accident)}>
+                      <button className="button editar-custos" onClick={() => openCostModal(accident)}>
                         Adicionar Custos
                       </button>
                     )}
-                    <button className="acidentes-button visualizar-custos" onClick={() => openViewCostModal(accident.id)}>
+                    <button className="button visualizar-custos" onClick={() => openViewCostModal(accident.id)}>
                       Visualizar Custos
                     </button>
                   </td>
