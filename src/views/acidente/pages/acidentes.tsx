@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
+
 import { listAccidents, searchAccidentsByEmployeeName } from "../../../api/acidenteApi";
+
 import AccidentDetailsModal from "../../../components/modal/acidente/AccidentDetailsModal";
 import AccidentCreateModal from "../../../components/modal/acidente/AccidentCreateModal";
 import CreateAccidentCostModal from "../../../components/modal/acidente/CreateAccidentCostModal";
 import ViewAccidentCostModal from "../../../components/modal/acidente/ViewAccidentCostModal";
+
 import { Accident } from "../../../interfaces/accident-interface";
+
 import "./css/acidentes.css";
 
 const Acidentes = () => {
@@ -94,14 +98,13 @@ const Acidentes = () => {
   };
 
   return (
-    <div className="acidentes-container">
-      <div className="acidentes-header">
+    <div className="container">
+      <div className="header">
         <h2>Lista de Acidentes</h2>
-        <button className="acidentes-button cadastrar-acidente" onClick={openCreateModal}>
+        <button className="button cadastrar-acidente" onClick={openCreateModal}>
           Cadastrar Acidente
         </button>
       </div>
-
       <div className="search-container">
         <input
           type="text"
@@ -111,12 +114,11 @@ const Acidentes = () => {
         />
         <button onClick={handleSearch}>Buscar</button>
       </div>
-
       {isLoading ? (
         <p>Carregando...</p>
       ) : accidents.length > 0 ? (
         <>
-          <table className="acidentes-table">
+          <table className="table">
             <thead>
               <tr>
                 <th>Nome do Funcionário</th>
@@ -126,33 +128,28 @@ const Acidentes = () => {
               </tr>
             </thead>
             <tbody>
-  {accidents.map((accident) => (
-    <tr key={accident.id}>
-      <td>{accident.employee.fullName}</td>
-      <td>{accident.jobTitle}</td>
-      <td>{accident.daysAway}</td>
-      <td>
-        <button className="acidentes-button" onClick={() => openModal(accident)}>
-          Visualizar Detalhes
-        </button>
-
-        {/* Exibe "Adicionar Custos" apenas se o acidente ainda não tiver custos cadastrados */}
-        {!accident.accidentCost && (
-          <button className="acidentes-button editar-custos" onClick={() => openCostModal(accident)}>
-            Adicionar Custos
-          </button>
-        )}
-
-        <button className="acidentes-button visualizar-custos" onClick={() => openViewCostModal(accident.id)}>
-          Visualizar Custos
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+              {accidents.map((accident) => (
+                <tr key={accident.id}>
+                  <td>{accident.employee.fullName}</td>
+                  <td>{accident.jobTitle}</td>
+                  <td>{accident.daysAway}</td>
+                  <td>
+                    <button className="button" onClick={() => openModal(accident)}>
+                      Visualizar Detalhes
+                    </button>
+                    {!accident.accidentCost && (
+                      <button className="button editar-custos" onClick={() => openCostModal(accident)}>
+                        Adicionar Custos
+                      </button>
+                    )}
+                    <button className="button visualizar-custos" onClick={() => openViewCostModal(accident.id)}>
+                      Visualizar Custos
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
-
           <div className="pagination">
             <button disabled={page === 1} onClick={() => setPage(page - 1)}>
               Anterior

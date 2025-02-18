@@ -1,7 +1,12 @@
 import React from 'react';
 import { logoutUser } from '../../../api/authApi';
+
 import { HOME_ACIDENTE } from '../../acidente/routes';
+import { HOME_BENEFICIO } from '../../beneficio/routes';
+import { HOME_ATTENDANCE } from '../../attendance/routes';
+
 import { useNavigate } from 'react-router-dom';
+import './css/home.css';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -20,30 +25,23 @@ const Home = () => {
     navigate(HOME_ACIDENTE());
   };
 
+  const handleNavigateToBenefits = () => {
+    navigate(HOME_BENEFICIO());
+  };
+
+  const handleNavigateToAttendance = () => {
+    navigate(HOME_ATTENDANCE());
+  };
+
   return (
-    <div style={styles.container}>
+    <div className="container">
       <h1>Bem-vindo à Home Page</h1>
-      <button style={styles.button} onClick={handleNavigateToAccidents}>Acidentes</button>
-      <button style={styles.button} onClick={handleLogout}>Logout</button>
+      <button className="button" onClick={handleNavigateToAccidents}>Acidentes</button>
+      <button className="button" onClick={handleNavigateToBenefits}>Benefícios</button>
+      <button className="button" onClick={handleNavigateToAttendance}>Frequência</button>
+      <button className="button" onClick={handleLogout}>Logout</button>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    fontFamily: 'Arial, sans-serif'
-  },
-  button: {
-    marginTop: '10px',
-    padding: '10px 20px',
-    fontSize: '16px',
-    cursor: 'pointer'
-  }
 };
 
 export default Home;
