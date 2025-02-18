@@ -17,9 +17,13 @@ import { HOME_BENEFICIO } from './views/beneficio/routes';
 import { HOME_ATTENDANCE } from './views/attendance/routes';
 import { HOME_PPE } from './views/ppe/routes';
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <Router>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} />
       <div className="App">
         <Routes>
           <Route path={LOGIN()} element={<Login />} />
