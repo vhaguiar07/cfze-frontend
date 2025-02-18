@@ -1,0 +1,125 @@
+@font-face {
+  font-family: 'Louis George Cafe';
+  src: url('../../../../assets/fonts/Louis-George-Cafe.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Louis George Cafe Bold';
+  src: url('../../../../assets/fonts/Louis-George-Cafe-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.main-containt {
+  background: #ea5d0e;
+  height: 100vh;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.form-container-auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.form-auth {
+  display: flex;
+  justify-content: center;
+  background: #fff;
+  border-radius: 16px;
+  height: 380px;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-div {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(4, 1fr);
+  margin: 30px;
+  width: 100%;
+}
+
+.auth-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.h1-auth {
+  color: #e95e0c;
+  font-family: Louis George Cafe Bold, sans-serif;
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #9a9ca2;
+  font-family: Louis George Cafe, sans-serif;
+  font-size: 16px;
+}
+
+.auth-fields {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.nice-form-group.auth {
+  background: #f2f2f2;
+  border: 1px solid #eaebec;
+  border-radius: 8px;
+  color: #323232;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.auth-fields>p {
+  color: #000;
+  font-family: Louis George Cafe Bold, sans-serif;
+}
+
+#text, #password {
+  all: unset;
+  border: none;
+  font-family: Louis George Cafe, sans-serif;
+  font-size: 16px;
+  width: 100%;
+}
+
+img {
+  display: inline-block;
+}
+
+.button-submit {
+  align-items: center;
+  background: #e95e0c;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-size: 18px;
+  justify-content: center;
+  margin-top: 28px;
+  padding: 5px 10px;
+  width: 100%;
+  font-family: Louis George Cafe Bold, sans-serif;
+}
