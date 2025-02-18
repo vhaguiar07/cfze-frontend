@@ -12,7 +12,7 @@ const Beneficios = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [searchTerm, setSearchTerm] = useState(""); // Estado do campo de pesquisa
+  const [searchTerm, setSearchTerm] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const limit = 10;
 
