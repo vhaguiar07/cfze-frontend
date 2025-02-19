@@ -62,6 +62,7 @@
 .h1-auth {
   color: #e95e0c;
   font-family: Louis George Cafe Bold, sans-serif;
+  font-weight: bold;
   font-size: 32px;
   margin-bottom: 10px;
 }

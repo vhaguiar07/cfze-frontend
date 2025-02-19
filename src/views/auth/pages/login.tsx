@@ -45,7 +45,7 @@ const Login = () => {
 
       toast.success("Login bem-sucedido", {
         toastId: "success-login",
-        autoClose: false,
+        autoClose: 5000,
         theme: "colored",
       });
 

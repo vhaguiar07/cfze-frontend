@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { createAccident } from "../../../api/acidenteApi";
 import "./css/AccidentCreateModal.css";
 
@@ -24,6 +24,7 @@ const AccidentCreateModal: React.FC<AccidentCreateModalProps> = ({ onClose }) =>
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -60,43 +61,114 @@ const AccidentCreateModal: React.FC<AccidentCreateModalProps> = ({ onClose }) =>
     }
   };
 
+  const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Cadastrar Acidente</h2>
+    <div className="modal-overlay" onClick={handleClickOutside}>
+      <div className="modal-content" ref={modalRef}>
+        <h2 className="font-bold mb-30 color-orange ta-left">Cadastrar Acidente</h2>
         <form onSubmit={handleSubmit}>
-          <input type="text" name="cpf" placeholder="CPF do Funcionário" value={formData.cpf} onChange={handleChange} required />
-          <input type="text" name="accidentNumber" placeholder="Número do Acidente (CAT)" value={formData.accidentNumber} onChange={handleChange} required />
-          <input type="datetime-local" name="accidentDate" value={formData.accidentDate} onChange={handleChange} required />
-          <input type="text" name="accidentType" placeholder="Tipo do Acidente" value={formData.accidentType} onChange={handleChange} required />
-          <textarea name="accidentDescription" placeholder="Descrição do Acidente" value={formData.accidentDescription} onChange={handleChange} required />
-          
           <label>
+            <div className="font-bold">Afastamento por acidente?</div>
             <input type="checkbox" name="accidentsWithLeave" checked={formData.accidentsWithLeave} onChange={handleCheckboxChange} />
-            Afastamento por acidente?
           </label>
-
-          <input type="text" name="bodyPartAffected" placeholder="Parte do Corpo Atingida" value={formData.bodyPartAffected} onChange={handleChange} required />
-          <input type="text" name="injurySeverity" placeholder="Gravidade da Lesão" value={formData.injurySeverity} onChange={handleChange} required />
-          
-          <select name="accidentOrIncident" value={formData.accidentOrIncident} onChange={handleChange} required>
-            <option value="">Selecione</option>
-            <option value="Acidente">Acidente</option>
-            <option value="Incidente">Incidente</option>
-          </select>
-
-          <input type="text" name="medicalCertificates" placeholder="Número de Atestados" value={formData.medicalCertificates} onChange={handleChange} required />
-          <input type="text" name="daysAway" placeholder="Dias de Afastamento" value={formData.daysAway} onChange={handleChange} />
-          <input type="text" name="hoursAway" placeholder="Horas de Afastamento" value={formData.hoursAway} onChange={handleChange} />
-          <textarea name="comments" placeholder="Comentários" value={formData.comments} onChange={handleChange} />
-
-          <div className="modal-buttons">
-            <button type="submit" disabled={isLoading}>
-              {isLoading ? "Cadastrando..." : "Cadastrar"}
-            </button>
-            <button type="button" onClick={onClose}>
-              Cancelar
-            </button>
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">CPF</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="cpf" placeholder="CPF do Funcionário" value={formData.cpf} onChange={handleChange} required />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Número do Acidente (CAT)</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="accidentNumber" value={formData.accidentNumber} onChange={handleChange} required />
+              </div>
+            </div>
+          </div>
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Data do Acidente</div>
+              <div className="campo-div">
+                <input className="campo-input" type="datetime-local" name="accidentDate" value={formData.accidentDate} onChange={handleChange} required />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Tipo do Acidente</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="accidentType" value={formData.accidentType} onChange={handleChange} required />
+              </div>
+            </div>
+          </div>
+          <div className="input-container">
+            <div className="campo-titulo">Descrição do Acidente</div>
+            <div className="campo-div">
+              <textarea className="campo-input" name="accidentDescription" value={formData.accidentDescription} onChange={handleChange} required />
+            </div>
+          </div>
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Parte do Corpo Atingida</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="bodyPartAffected" value={formData.bodyPartAffected} onChange={handleChange} required />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Gravidade da Lesão</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="injurySeverity" value={formData.injurySeverity} onChange={handleChange} required />
+              </div>
+            </div>
+          </div>
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Número de Atestados</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="medicalCertificates" value={formData.medicalCertificates} onChange={handleChange} required />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Dias de Afastamento</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="daysAway" value={formData.daysAway} onChange={handleChange} />
+              </div>
+            </div>
+          </div>
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Horas de Afastamento</div>
+              <div className="campo-div">
+                <input className="campo-input" type="text" name="hoursAway" value={formData.hoursAway} onChange={handleChange} />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Acidente ou Incidente</div>
+              <div className="campo-div">
+                <select className="campo-input" name="accidentOrIncident" value={formData.accidentOrIncident} onChange={handleChange} required>
+                  <option value="">Selecione</option>
+                  <option value="Acidente">Acidente</option>
+                  <option value="Incidente">Incidente</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="input-container">
+            <div className="campo-titulo">Comentários</div>
+            <div className="campo-div">
+              <textarea className="campo-input" name="comments" value={formData.comments} onChange={handleChange} />
+            </div>
+            <div className="modal-buttons">
+              <button className="button" type="submit" disabled={isLoading}>
+                {isLoading ? "Cadastrando..." : "Cadastrar"}
+              </button>
+              <button className="button-cancel" type="button" onClick={onClose}>
+                Cancelar
+              </button>
+            </div>
           </div>
         </form>
       </div>
