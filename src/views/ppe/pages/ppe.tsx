@@ -50,76 +50,84 @@ const PPERecords = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h2>Lista de Registros de EPI</h2>
-        <button className="button cadastrar-epi" onClick={() => setIsCreateModalOpen(true)}>
-          Cadastrar EPI
-        </button>
+    <div className="main-containt-tables">
+      <div className="container">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar por nome do funcionário..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="button" onClick={handleSearch}>Buscar</button>
+        </div>
+        <div className="header">
+          <h2 className="font-bold">Lista de Registros de EPI</h2>
+          <button className="button cadastrar-acidente" onClick={() => setIsCreateModalOpen(true)}>
+            + Cadastrar EPI
+          </button>
+        </div>
+        {isLoading ? (
+          <p>Carregando...</p>
+        ) : ppeRecords.length > 0 ? (
+          <>
+            <div className="wrap-table100">
+              <div className="table">
+                <div className="row header">
+                  <div className="cell">Funcionário</div>
+                  <div className="cell">Descrição do EPI</div>
+                  <div className="cell">Setor</div>
+                  <div className="cell">Quantidade</div>
+                  <div className="cell">Situação</div>
+                  <div className="cell">Ações</div>
+                </div>
+                {ppeRecords.map((record) => (
+                  <div className="row" key={record.id}>
+                    <div className="cell" data-title="Funcionário">
+                      {record.employeeName}
+                    </div>
+                    <div className="cell" data-title="Descrição do EPI">
+                      {record.ppeDescription}
+                    </div>
+                    <div className="cell" data-title="Setor">
+                      {record.department}
+                    </div>
+                    <div className="cell" data-title="Quantidade">
+                      {record.quantity}
+                    </div>
+                    <div className="cell" data-title="Situação">
+                      {record.situation}
+                    </div>
+                    <div className="cell" data-title="Ações">
+                      <button className="button" onClick={() => {openDetailsModal(record) }}>
+                        Visualizar Detalhes
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="pagination">
+              <button className="button" disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Anterior
+              </button>
+              <span className="font">Página {page}</span>
+              <button className="button" disabled={page * limit >= total} onClick={() => setPage(page + 1)}>
+                Próxima
+              </button>
+            </div>
+          </>
+          ) : (
+            <p>Nenhum registro de EPI encontrado.</p>
+          )}
+        {isCreateModalOpen && <EmployeePPECreateModal onClose={() => setIsCreateModalOpen(false)} />}
+        {isDetailsModalOpen && selectedRecord && (
+          <EmployeePPEDetailsModal
+            record={selectedRecord}
+            onClose={() => setIsDetailsModalOpen(false)}
+          />
+        )}
       </div>
-
-      {/* Campo de pesquisa */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nome do funcionário..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Buscar</button>
-      </div>
-
-      {isLoading ? (
-        <p>Carregando...</p>
-      ) : ppeRecords.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Funcionário</th>
-              <th>Descrição do EPI</th>
-              <th>Setor</th>
-              <th>Quantidade</th>
-              <th>Situação</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ppeRecords.map((record) => (
-              <tr key={record.id}>
-                <td>{record.employeeName}</td>
-                <td>{record.ppeDescription}</td>
-                <td>{record.department}</td>
-                <td>{record.quantity}</td>
-                <td>{record.situation}</td>
-                <td>
-                  <button
-                    className="button detalhes-epi"
-                    onClick={() => openDetailsModal(record)}
-                  >
-                    Visualizar Detalhes
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Nenhum registro de EPI encontrado.</p>
-      )}
-
-      <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>Anterior</button>
-        <span>Página {page}</span>
-        <button disabled={page * limit >= total} onClick={() => setPage(page + 1)}>Próxima</button>
-      </div>
-
-      {isCreateModalOpen && <EmployeePPECreateModal onClose={() => setIsCreateModalOpen(false)} />}
-      {isDetailsModalOpen && selectedRecord && (
-        <EmployeePPEDetailsModal
-          record={selectedRecord}
-          onClose={() => setIsDetailsModalOpen(false)}
-        />
-      )}
     </div>
   );
 };

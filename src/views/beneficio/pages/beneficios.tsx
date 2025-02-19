@@ -50,74 +50,80 @@ const Beneficios = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h2>Lista de Benefícios</h2>
-        <button className="button cadastrar-beneficio" onClick={() => setIsCreateModalOpen(true)}>
-          Cadastrar Benefício
-        </button>
+    <div className="main-containt-tables">
+      <div className="container">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar por nome do funcionário..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="button" onClick={handleSearch}>Buscar</button>
+        </div>
+        <div className="header">
+          <h2 className="font-bold">Lista de Benefícios</h2>
+          <button className="button cadastrar-acidente" onClick={() => setIsCreateModalOpen(true)}>
+            + Cadastrar Benefício
+          </button>
+        </div>
+        {isLoading ? (
+          <p>Carregando...</p>
+        ) : benefits.length > 0 ? (
+          <>
+            <div className="wrap-table100">
+              <div className="table">
+                <div className="row header">
+                  <div className="cell">Funcionário</div>
+                  <div className="cell">Benefício</div>
+                  <div className="cell">Período</div>
+                  <div className="cell">Valor Total</div>
+                  <div className="cell">Ações</div>
+                </div>
+                {benefits.map((benefit) => (
+                  <div className="row" key={benefit.id}>
+                    <div className="cell" data-title="Funcionário">
+                      {benefit.employeeCpf}
+                    </div>
+                    <div className="cell" data-title="Benefício">
+                      {benefit.benefit}
+                    </div>
+                    <div className="cell" data-title="Período">
+                      {benefit.referencePeriod}
+                    </div>
+                    <div className="cell" data-title="Valor Total">
+                      R$ {benefit.totalPrice}
+                    </div>
+                    <div className="cell" data-title="Ações">
+                      <button className="button" onClick={() => openDetailsModal(benefit)}>
+                        Visualizar Detalhes
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="pagination">
+              <button className="button" disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Anterior
+              </button>
+              <span className="font">Página {page}</span>
+              <button className="button" disabled={page * limit >= total} onClick={() => setPage(page + 1)}>
+                Próxima
+              </button>
+            </div>
+          </>
+        ) : (
+          <p>Nenhum benefício encontrado.</p>
+        )}
+        {isCreateModalOpen && <EmployeeBenefitCreateModal onClose={() => setIsCreateModalOpen(false)} />}
+        {isDetailsModalOpen && selectedBenefit && (
+          <EmployeeBenefitDetailsModal
+            benefit={selectedBenefit}
+            onClose={() => setIsDetailsModalOpen(false)}
+          />
+        )}
       </div>
-
-      {/* Campo de pesquisa */}
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nome do funcionário..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Buscar</button>
-      </div>
-
-      {isLoading ? (
-        <p>Carregando...</p>
-      ) : benefits.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Funcionário</th>
-              <th>Benefício</th>
-              <th>Período</th>
-              <th>Valor Total</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {benefits.map((benefit) => (
-              <tr key={benefit.id}>
-                <td>{benefit.employeeCpf}</td>
-                <td>{benefit.benefit}</td>
-                <td>{benefit.referencePeriod}</td>
-                <td>R$ {benefit.totalPrice}</td>
-                <td>
-                  <button
-                    className="button detalhes-beneficio"
-                    onClick={() => openDetailsModal(benefit)}
-                  >
-                    Visualizar Detalhes
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Nenhum benefício encontrado.</p>
-      )}
-
-      <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>Anterior</button>
-        <span>Página {page}</span>
-        <button disabled={page * limit >= total} onClick={() => setPage(page + 1)}>Próxima</button>
-      </div>
-
-      {isCreateModalOpen && <EmployeeBenefitCreateModal onClose={() => setIsCreateModalOpen(false)} />}
-      {isDetailsModalOpen && selectedBenefit && (
-        <EmployeeBenefitDetailsModal
-          benefit={selectedBenefit}
-          onClose={() => setIsDetailsModalOpen(false)}
-        />
-      )}
     </div>
   );
 };

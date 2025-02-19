@@ -85,9 +85,9 @@ const AccidentCreateModal: React.FC<AccidentCreateModalProps> = ({ onClose }) =>
             <option value="Incidente">Incidente</option>
           </select>
 
-          <input type="number" name="medicalCertificates" placeholder="Número de Atestados" value={formData.medicalCertificates} onChange={handleChange} required />
-          <input type="number" name="daysAway" placeholder="Dias de Afastamento" value={formData.daysAway} onChange={handleChange} />
-          <input type="number" name="hoursAway" placeholder="Horas de Afastamento" value={formData.hoursAway} onChange={handleChange} />
+          <input type="text" name="medicalCertificates" placeholder="Número de Atestados" value={formData.medicalCertificates} onChange={handleChange} required />
+          <input type="text" name="daysAway" placeholder="Dias de Afastamento" value={formData.daysAway} onChange={handleChange} />
+          <input type="text" name="hoursAway" placeholder="Horas de Afastamento" value={formData.hoursAway} onChange={handleChange} />
           <textarea name="comments" placeholder="Comentários" value={formData.comments} onChange={handleChange} />
 
           <div className="modal-buttons">

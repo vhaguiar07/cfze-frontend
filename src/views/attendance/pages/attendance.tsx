@@ -44,75 +44,81 @@ const Attendance = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h2>Lista de Frequências</h2>
-        <button className="button cadastrar-frequencia" onClick={() => setIsCreateModalOpen(true)}>
-          Cadastrar Frequência
-        </button>
+    <div className="main-containt-tables">
+      <div className="container">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar por nome do funcionário..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="button" onClick={handleSearch}>Buscar</button>
+        </div>
+        <div className="header">
+          <h2 className="font-bold">Lista de Frequências</h2>
+          <button className="button cadastrar-acidente" onClick={() => setIsCreateModalOpen(true)}>
+            + Cadastrar Frequência
+          </button>
+        </div>
+        {isLoading ? (
+          <p>Carregando...</p>
+        ) : records.length > 0 ? (
+          <>
+            <div className="wrap-table100">
+              <div className="table">
+                <div className="row header">
+                  <div className="cell">Funcionário</div>
+                  <div className="cell">Período</div>
+                  <div className="cell">Faltas</div>
+                  <div className="cell">Dias Trabalhados</div>
+                  <div className="cell">Situação</div>
+                  <div className="cell">Ações</div>
+                </div>
+                {records.map((record) => (
+                  <div className="row" key={record.id}>
+                    <div className="cell" data-title="Funcionário">
+                      {record.employeeFullName}
+                    </div>
+                    <div className="cell" data-title="Período">
+                      {record.referencePeriod}
+                    </div>
+                    <div className="cell" data-title="Faltas">
+                      {record.absences}
+                    </div>
+                    <div className="cell" data-title="Dias Trabalhados">
+                      {record.workedDays}
+                    </div>
+                    <div className="cell" data-title="Situação">
+                      {record.situation}
+                    </div>
+                    <div className="cell" data-title="Ações">
+                      <button className="button" onClick={() => {setSelectedRecord(record); setIsDetailsModalOpen(true); }}>
+                        Visualizar Detalhes
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="pagination">
+              <button className="button" disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Anterior
+              </button>
+              <span className="font">Página {page}</span>
+              <button className="button" disabled={page * limit >= total} onClick={() => setPage(page + 1)}>
+                Próxima
+              </button>
+            </div>
+          </>
+          ) : (
+            <p>Nenhum registro de frequência encontrado.</p>
+          )}
+        {isCreateModalOpen && <AttendanceCreateModal onClose={() => setIsCreateModalOpen(false)} />}
+        {isDetailsModalOpen && selectedRecord && (
+          <AttendanceDetailsModal record={selectedRecord} onClose={() => setIsDetailsModalOpen(false)} />
+        )}
       </div>
-
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nome do funcionário..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Buscar</button>
-      </div>
-
-      {isLoading ? (
-        <p>Carregando...</p>
-      ) : records.length > 0 ? (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Funcionário</th>
-              <th>Período</th>
-              <th>Faltas</th>
-              <th>Dias Trabalhados</th>
-              <th>Situação</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((record) => (
-              <tr key={record.id}>
-                <td>{record.employeeFullName}</td>
-                <td>{record.referencePeriod}</td>
-                <td>{record.absences}</td>
-                <td>{record.workedDays}</td>
-                <td>{record.situation}</td>
-                <td>
-                  <button
-                    className="button detalhes-frequencia"
-                    onClick={() => {
-                      setSelectedRecord(record);
-                      setIsDetailsModalOpen(true);
-                    }}
-                  >
-                    Visualizar Detalhes
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Nenhum registro de frequência encontrado.</p>
-      )}
-
-      <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>Anterior</button>
-        <span>Página {page}</span>
-        <button disabled={page * limit >= total} onClick={() => setPage(page + 1)}>Próxima</button>
-      </div>
-
-      {isCreateModalOpen && <AttendanceCreateModal onClose={() => setIsCreateModalOpen(false)} />}
-      {isDetailsModalOpen && selectedRecord && (
-        <AttendanceDetailsModal record={selectedRecord} onClose={() => setIsDetailsModalOpen(false)} />
-      )}
     </div>
   );
 };

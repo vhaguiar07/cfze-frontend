@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; // Importando o Toastify
+import { toast } from 'react-toastify';
 import { loginUser, validateUser } from '../../../api/authApi';
 import { HOME } from '../../home/routes';
 import './css/login.css'

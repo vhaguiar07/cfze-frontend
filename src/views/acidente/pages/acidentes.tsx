@@ -98,94 +98,99 @@ const Acidentes = () => {
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h2>Lista de Acidentes</h2>
-        <button className="button cadastrar-acidente" onClick={openCreateModal}>
-          Cadastrar Acidente
-        </button>
-      </div>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Buscar por nome do funcionário..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Buscar</button>
-      </div>
-      {isLoading ? (
-        <p>Carregando...</p>
-      ) : accidents.length > 0 ? (
-        <>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Nome do Funcionário</th>
-                <th>Cargo</th>
-                <th>Dias Afastados</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {accidents.map((accident) => (
-                <tr key={accident.id}>
-                  <td>{accident.employee.fullName}</td>
-                  <td>{accident.jobTitle}</td>
-                  <td>{accident.daysAway}</td>
-                  <td>
-                    <button className="button" onClick={() => openModal(accident)}>
-                      Visualizar Detalhes
-                    </button>
-                    {!accident.accidentCost && (
-                      <button className="button editar-custos" onClick={() => openCostModal(accident)}>
-                        Adicionar Custos
+    <div className="main-containt-tables">
+      <div className="container">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar por nome do funcionário..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="button" onClick={handleSearch}>Buscar</button>
+        </div>
+        <div className="header">
+          <h2 className="font-bold">Acidentes</h2>
+          <button className="button cadastrar-acidente" onClick={openCreateModal}>
+            + Cadastrar Acidente
+          </button>
+        </div>
+        {isLoading ? (
+          <p>Carregando...</p>
+        ) : accidents.length > 0 ? (
+          <>
+            <div className="wrap-table100">
+              <div className="table">
+                <div className="row header">
+                  <div className="cell">Nome do Funcionário</div>
+                  <div className="cell">Cargo</div>
+                  <div className="cell">Dias Afastados</div>
+                  <div className="cell">Ações</div>
+                </div>
+                {accidents.map((accident) => (
+                  <div className="row" key={accident.id}>
+                    <div className="cell" data-title="Nome do Funcionário">
+                      {accident.employee.fullName}
+                    </div>
+                    <div className="cell" data-title="Cargo">
+                      {accident.jobTitle}
+                    </div>
+                    <div className="cell" data-title="Dias Afastados">
+                      {accident.daysAway}
+                    </div>
+                    <div className="cell" data-title="Ações">
+                      <button className="button" onClick={() => openModal(accident)}>
+                        Visualizar Detalhes
                       </button>
-                    )}
-                    <button className="button visualizar-custos" onClick={() => openViewCostModal(accident.id)}>
-                      Visualizar Custos
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="pagination">
-            <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-              Anterior
-            </button>
-            <span>Página {page}</span>
-            <button disabled={page * limit >= total} onClick={() => setPage(page + 1)}>
-              Próxima
-            </button>
-          </div>
-        </>
-      ) : (
-        <p>Nenhum acidente encontrado.</p>
-      )}
+                      {!accident.accidentCost && (
+                        <button className="button" onClick={() => openCostModal(accident)}>
+                          Adicionar Custos
+                        </button>
+                      )}
+                      <button className="button" onClick={() => openViewCostModal(accident.id)}>
+                        Visualizar Custos
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="pagination">
+              <button className="button" disabled={page === 1} onClick={() => setPage(page - 1)}>
+                Anterior
+              </button>
+              <span className="font">Página {page}</span>
+              <button className="button" disabled={page * limit >= total} onClick={() => setPage(page + 1)}>
+                Próxima
+              </button>
+            </div>
+          </>
+        ) : (
+          <p>Nenhum acidente encontrado.</p>
+        )}
 
-      {isModalOpen && selectedAccident && (
-        <AccidentDetailsModal
-          accident={selectedAccident}
-          onClose={closeModal}
-        />
-      )}
-      {isCostModalOpen && selectedAccidentForCost && (
-        <CreateAccidentCostModal
-          isOpen={isCostModalOpen}
-          onClose={closeCostModal}
-          accident={selectedAccidentForCost}
-        />
-      )}
-      {isViewCostModalOpen && selectedAccidentId && (
-        <ViewAccidentCostModal
-          isOpen={isViewCostModalOpen}
-          onClose={closeViewCostModal}
-          accidentId={selectedAccidentId}
-        />
-      )}
-
-      {isCreateModalOpen && <AccidentCreateModal onClose={closeCreateModal} />}
+        {isModalOpen && selectedAccident && (
+          <AccidentDetailsModal
+            accident={selectedAccident}
+            onClose={closeModal}
+          />
+        )}
+        {isCostModalOpen && selectedAccidentForCost && (
+          <CreateAccidentCostModal
+            isOpen={isCostModalOpen}
+            onClose={closeCostModal}
+            accident={selectedAccidentForCost}
+          />
+        )}
+        {isViewCostModalOpen && selectedAccidentId && (
+          <ViewAccidentCostModal
+            isOpen={isViewCostModalOpen}
+            onClose={closeViewCostModal}
+            accidentId={selectedAccidentId}
+          />
+        )}
+        {isCreateModalOpen && <AccidentCreateModal onClose={closeCreateModal} />}
+      </div>
     </div>
   );
 };

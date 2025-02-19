@@ -31,16 +31,24 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
     setError(null);
     try {
       const data = await getAccidentCostById(accidentId);
-      setCostData(data);
-      setFormData({
-        medicationCost: data.medicationCost || "",
-        foodCost: data.foodCost || "",
-        materialCost: data.materialCost || "",
-        legalCost: data.legalCost || "",
-        comments: data.comments || "",
-      });
-    } catch (err) {
-      setError("Erro ao buscar os custos do acidente.");
+      if (!data) {
+        setCostData(null);
+      } else {
+        setCostData(data);
+        setFormData({
+          medicationCost: data.medicationCost || "",
+          foodCost: data.foodCost || "",
+          materialCost: data.materialCost || "",
+          legalCost: data.legalCost || "",
+          comments: data.comments || "",
+        });
+      }
+    } catch (err: any) {
+      if (err.response && err.response.status === 404) {
+        setCostData(null);
+      } else {
+        setError("Erro ao buscar os custos do acidente.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +68,7 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
       await updateAccidentCost(accidentId, formData);
       alert("Custos atualizados com sucesso!");
       setIsEditing(false);
-      fetchCostData(); // Atualiza os dados após a edição
+      fetchCostData();
     } catch (err) {
       alert("Erro ao atualizar os custos.");
     } finally {
@@ -91,7 +99,6 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
             <p><strong>Departamento:</strong> {costData.accident.employee.department}</p>
             <hr />
             <p><strong>Custos:</strong></p>
-
             {isEditing ? (
               <>
                 <input type="number" name="medicationCost" value={formData.medicationCost} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Medicamentos" />
@@ -102,12 +109,18 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
               </>
             ) : (
               <>
-                <p>Medicamentos: R$ {Number(costData.medicationCost || 0).toFixed(2)}</p>
-                <p>Alimentação: R$ {Number(costData.foodCost || 0).toFixed(2)}</p>
-                <p>Materiais: R$ {Number(costData.materialCost || 0).toFixed(2)}</p>
-                <p>Custos Legais: R$ {Number(costData.legalCost || 0).toFixed(2)}</p>
-                <p className="font-bold">Total: R$ {Number(costData.totalCost || 0).toFixed(2)}</p>
-                <p><strong>Comentários:</strong> {costData.comments || "Nenhum comentário"}</p>
+                {costData === null ? (
+                  <p className="text-red-500 font-bold">Custos ainda não adicionados</p>
+                ) : (
+                  <>
+                    <p>Medicamentos: R$ {Number(costData.medicationCost || 0).toFixed(2)}</p>
+                    <p>Alimentação: R$ {Number(costData.foodCost || 0).toFixed(2)}</p>
+                    <p>Materiais: R$ {Number(costData.materialCost || 0).toFixed(2)}</p>
+                    <p>Custos Legais: R$ {Number(costData.legalCost || 0).toFixed(2)}</p>
+                    <p className="font-bold">Total: R$ {Number(costData.totalCost || 0).toFixed(2)}</p>
+                    <p><strong>Comentários:</strong> {costData.comments || "Nenhum comentário"}</p>
+                  </>
+                )}
               </>
             )}
           </div>

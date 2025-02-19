@@ -18,17 +18,16 @@ const CreateAccidentCostModal: React.FC<ModalProps> = ({ isOpen, onClose, accide
     comments: '',
   });
 
-  const [accidentId, setAccidentId] = useState<string>(''); // Armazena o ID sem exibir
+  const [accidentId, setAccidentId] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Atualiza os dados sempre que um novo acidente for passado
   useEffect(() => {
     if (accident) {
       setAccidentId(accident.id || '');
     }
   }, [accident]);
 
-  if (!isOpen || !accident) return null; // Se o modal estiver fechado, não renderiza nada
+  if (!isOpen || !accident) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -51,14 +50,14 @@ const CreateAccidentCostModal: React.FC<ModalProps> = ({ isOpen, onClose, accide
 
       const formattedData = {
         ...formData,
-        accidentId, // Inclui o ID na requisição sem mostrar no formulário
+        accidentId,
         leaveStartDate: formData.leaveStartDate ? new Date(formData.leaveStartDate).toISOString() : null,
         totalCost,
       };
 
       await createAccidentCost(formattedData);
       alert('Custo de acidente cadastrado com sucesso!');
-      onClose(); // Fecha o modal após o sucesso
+      onClose();
     } catch (error) {
       alert(error instanceof Error ? error.message : 'Erro desconhecido');
     } finally {
@@ -74,7 +73,7 @@ const CreateAccidentCostModal: React.FC<ModalProps> = ({ isOpen, onClose, accide
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <span>Custo com Medicamentos</span>
           <input
-            type="number"
+            type="text"
             name="medicationCost"
             placeholder="Custo com Medicamentos"
             value={formData.medicationCost}
@@ -83,7 +82,7 @@ const CreateAccidentCostModal: React.FC<ModalProps> = ({ isOpen, onClose, accide
           />
           <span>Custo com Alimentação</span>
           <input
-            type="number"
+            type="text"
             name="foodCost"
             placeholder="Custo com Alimentação"
             value={formData.foodCost}
@@ -92,7 +91,7 @@ const CreateAccidentCostModal: React.FC<ModalProps> = ({ isOpen, onClose, accide
           />
           <span>Custo com Materiais</span>
           <input
-            type="number"
+            type="text"
             name="materialCost"
             placeholder="Custo com Materiais"
             value={formData.materialCost}
@@ -101,7 +100,7 @@ const CreateAccidentCostModal: React.FC<ModalProps> = ({ isOpen, onClose, accide
           />
           <span>Custo Legal</span>
           <input
-            type="number"
+            type="text"
             name="legalCost"
             placeholder="Custo Legal"
             value={formData.legalCost}
