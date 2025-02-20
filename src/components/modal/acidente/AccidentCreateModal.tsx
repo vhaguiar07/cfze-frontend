@@ -80,7 +80,7 @@ const AccidentCreateModal: React.FC<AccidentCreateModalProps> = ({ onClose }) =>
             <div className="input-container">
               <div className="campo-titulo">CPF</div>
               <div className="campo-div">
-                <input className="campo-input" type="text" name="cpf" placeholder="CPF do Funcionário" value={formData.cpf} onChange={handleChange} required />
+                <input className="campo-input" type="text" name="cpf" value={formData.cpf} onChange={handleChange} required />
               </div>
             </div>
             <div className="input-container">
