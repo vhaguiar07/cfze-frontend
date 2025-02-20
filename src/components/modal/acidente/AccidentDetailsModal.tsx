@@ -161,9 +161,14 @@ const AccidentDetailsModal: React.FC<AccidentDetailsModalProps> = ({ accident, o
           </div>
 
           <div className="modal-buttons">
-            <button type="submit">Salvar</button>
-            <button type="button" onClick={onClose}>Cancelar</button>
+            <button className="button" type="submit" disabled={isLoading}>
+              {isLoading ? "Salvando..." : "Salvar"}
+            </button>
+            <button className="button-cancel" type="button" onClick={onClose}>
+              Cancelar
+            </button>
           </div>
+
         </form>
       </div>
     </div>
