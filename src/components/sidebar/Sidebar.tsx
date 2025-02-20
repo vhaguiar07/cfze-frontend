@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
         <Link to={HOME_ACIDENTE()}>Acidente</Link>
         <Link to={HOME_BENEFICIO()}>Benefício</Link>
         <Link to={HOME_ATTENDANCE()}>Frequência</Link>
-        <Link to={HOME_PPE()}>PPE</Link>
+        <Link to={HOME_PPE()}>EPI</Link>
       </nav>
     </div>
   );
