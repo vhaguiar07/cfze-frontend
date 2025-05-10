@@ -1,3 +1,7 @@
+.main-containt-tables {
+  margin-left: 250px;
+}
+
 container {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -6,6 +10,7 @@ container {
 table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
 }
 
 table th,
@@ -17,4 +22,158 @@ table td {
 
 table th {
   background-color: #f4f4f4;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 30px 30px 0;
+  box-sizing: border-box;
+}
+
+.search-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.search-container input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.button {
+  align-items: center;
+  background: #e95e0c;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  justify-content: center;
+  padding: 5px 10px;
+  font-family: Louis George Cafe Bold, sans-serif;
+  margin-right: 10px;
+}
+
+.wrap-table100 {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 30px;
+}
+
+.table {
+  width: 100%;
+  display: table;
+  margin: 0;
+}
+
+.row {
+  display: table-row;
+  background: #fff;
+}
+
+.row:hover {
+  background-color: #ececff;
+}
+
+.row.header {
+  color: #ffffff;
+  background: #e95e0c;
+  display: table-row;
+}
+
+.cell {
+  display: table-cell;
+  padding: 15px 20px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.row .cell:nth-child(1) {
+  padding-left: 40px;
+}
+
+.row .cell:nth-child(4) {
+  padding-right: 40px;
+}
+
+.row.header .cell {
+  font-family: "Louis George Cafe Bold", sans-serif;
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.2;
+  font-weight: bold;
+  padding-top: 19px;
+  padding-bottom: 19px;
+}
+
+.row .cell {
+  font-family: "Louis George Cafe", sans-serif;
+  font-size: 15px;
+  color: #666666;
+  line-height: 1.2;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .cell {
+    flex-basis: 100%;
+    display: block;
+    text-align: left;
+    padding: 10px;
+  }
+
+  .row.header {
+    display: none;
+  }
+
+  .cell:before {
+    content: attr(data-title) ": ";
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 5px;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+}
+
+.button {
+  padding: 8px 16px;
+  background-color: #e95e0c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

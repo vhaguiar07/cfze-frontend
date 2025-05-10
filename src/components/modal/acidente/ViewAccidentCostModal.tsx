@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { getAccidentCostById, updateAccidentCost } from "../../../api/acidenteApi";
 
 interface ViewAccidentCostModalProps {
@@ -12,6 +12,7 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     medicationCost: "",
     foodCost: "",
@@ -31,16 +32,24 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
     setError(null);
     try {
       const data = await getAccidentCostById(accidentId);
-      setCostData(data);
-      setFormData({
-        medicationCost: data.medicationCost || "",
-        foodCost: data.foodCost || "",
-        materialCost: data.materialCost || "",
-        legalCost: data.legalCost || "",
-        comments: data.comments || "",
-      });
-    } catch (err) {
-      setError("Erro ao buscar os custos do acidente.");
+      if (!data) {
+        setCostData(null);
+      } else {
+        setCostData(data);
+        setFormData({
+          medicationCost: data.medicationCost || "",
+          foodCost: data.foodCost || "",
+          materialCost: data.materialCost || "",
+          legalCost: data.legalCost || "",
+          comments: data.comments || "",
+        });
+      }
+    } catch (err: any) {
+      if (err.response && err.response.status === 404) {
+        setCostData(null);
+      } else {
+        setError("Erro ao buscar os custos do acidente.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +69,7 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
       await updateAccidentCost(accidentId, formData);
       alert("Custos atualizados com sucesso!");
       setIsEditing(false);
-      fetchCostData(); // Atualiza os dados após a edição
+      fetchCostData();
     } catch (err) {
       alert("Erro ao atualizar os custos.");
     } finally {
@@ -70,13 +79,16 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
 
   if (!isOpen) return null;
 
+  const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Detalhes do Custo</h2>
-          <button onClick={onClose} className="text-red-500 font-bold">X</button>
-        </div>
+    <div className="modal-overlay" onClick={handleClickOutside}>
+      <div className="modal-content" ref={modalRef}>
+        <h2 className="font-bold mb-30 color-orange ta-left">Detalhes dos Custos</h2>
 
         {isLoading ? (
           <p>Carregando...</p>
@@ -84,30 +96,170 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
           <p className="text-red-500">{error}</p>
         ) : costData ? (
           <div className="space-y-2">
-            <p><strong>Acidente:</strong> {costData.accident.accidentNumber}</p>
-            <p><strong>Data:</strong> {new Date(costData.accident.accidentDate).toLocaleDateString()}</p>
-            <p><strong>Tipo:</strong> {costData.accident.accidentType}</p>
-            <p><strong>Funcionário:</strong> {costData.accident.employee.fullName}</p>
-            <p><strong>Departamento:</strong> {costData.accident.employee.department}</p>
-            <hr />
-            <p><strong>Custos:</strong></p>
+            <div className="input-group">
+              <div className="input-container">
+                <div className="campo-titulo">Número do Acidente</div>
+                <div className="campo-div">
+                  <input
+                    type="text"
+                    name="accidentNumber"
+                    value={costData.accident.accidentNumber}
+                    className="campo-input"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="font-bold mt-20 mb-20">Custos</div>
 
             {isEditing ? (
               <>
-                <input type="number" name="medicationCost" value={formData.medicationCost} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Medicamentos" />
-                <input type="number" name="foodCost" value={formData.foodCost} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Alimentação" />
-                <input type="number" name="materialCost" value={formData.materialCost} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Materiais" />
-                <input type="number" name="legalCost" value={formData.legalCost} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Custos Legais" />
-                <textarea name="comments" value={formData.comments} onChange={handleChange} className="border p-2 rounded w-full" placeholder="Comentários"></textarea>
+                <div className="input-group">
+                  <div className="input-container">
+                    <div className="campo-titulo">Medicamentos</div>
+                    <div className="campo-div">
+                      <input
+                        type="text"
+                        name="medicationCost"
+                        value={formData.medicationCost}
+                        onChange={handleChange}
+                        className="campo-input"
+                        placeholder="Medicamentos"
+                      />
+                    </div>
+                  </div>
+                  <div className="input-container">
+                    <div className="campo-titulo">Alimentação</div>
+                    <div className="campo-div">
+                      <input
+                        type="text"
+                        name="foodCost"
+                        value={formData.foodCost}
+                        onChange={handleChange}
+                        className="campo-input"
+                        placeholder="Alimentação"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="input-group">
+                  <div className="input-container">
+                    <div className="campo-titulo">Materiais</div>
+                    <div className="campo-div">
+                      <input
+                        type="text"
+                        name="materialCost"
+                        value={formData.materialCost}
+                        onChange={handleChange}
+                        className="campo-input"
+                        placeholder="Materiais"
+                      />
+                    </div>
+                  </div>
+                  <div className="input-container">
+                    <div className="campo-titulo">Custos Legais</div>
+                    <div className="campo-div">
+                      <input
+                        type="text"
+                        name="legalCost"
+                        value={formData.legalCost}
+                        onChange={handleChange}
+                        className="campo-input"
+                        placeholder="Custos Legais"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="input-container">
+                  <div className="campo-titulo">Comentários</div>
+                  <div className="campo-div">
+                    <textarea
+                      name="comments"
+                      value={formData.comments}
+                      onChange={handleChange}
+                      className="campo-input"
+                      placeholder="Comentários"
+                    ></textarea>
+                  </div>
+                </div>
               </>
             ) : (
               <>
-                <p>Medicamentos: R$ {Number(costData.medicationCost || 0).toFixed(2)}</p>
-                <p>Alimentação: R$ {Number(costData.foodCost || 0).toFixed(2)}</p>
-                <p>Materiais: R$ {Number(costData.materialCost || 0).toFixed(2)}</p>
-                <p>Custos Legais: R$ {Number(costData.legalCost || 0).toFixed(2)}</p>
-                <p className="font-bold">Total: R$ {Number(costData.totalCost || 0).toFixed(2)}</p>
-                <p><strong>Comentários:</strong> {costData.comments || "Nenhum comentário"}</p>
+                {costData === null ? (
+                  <p className="text-red-500 font-bold">Custos ainda não adicionados</p>
+                ) : (
+                  <>
+
+                    <div className="input-group">
+                      <div className="input-container">
+                        <div className="campo-titulo">Medicamentos</div>
+                        <div className="campo-div">
+                          <input
+                            type="text"
+                            name="medicationCost"
+                            value={Number(costData.medicationCost || 0)}
+                            className="campo-input"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div className="input-container">
+                        <div className="campo-titulo">Alimentação</div>
+                        <div className="campo-div">
+                          <input
+                            type="text"
+                            name="foodCost"
+                            value={Number(costData.foodCost || 0)}
+                            className="campo-input"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="input-group">
+                      <div className="input-container">
+                        <div className="campo-titulo">Materiais</div>
+                        <div className="campo-div">
+                          <input
+                            type="text"
+                            name="materialCost"
+                            value={Number(costData.materialCost || 0)}
+                            className="campo-input"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div className="input-container">
+                        <div className="campo-titulo">Custos Legais</div>
+                        <div className="campo-div">
+                          <input
+                            type="text"
+                            name="legalCost"
+                            value={Number(costData.legalCost || 0)}
+                            className="campo-input"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="input-container">
+                      <div className="campo-titulo">Comentários</div>
+                      <div className="campo-div">
+                        <textarea
+                          name="comments"
+                          value={costData.comments || "Nenhum comentário"}
+                          className="campo-input"
+                          disabled
+                        ></textarea>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
           </div>
@@ -115,25 +267,43 @@ const ViewAccidentCostModal: React.FC<ViewAccidentCostModalProps> = ({ isOpen, o
           <p>Nenhum dado encontrado.</p>
         )}
 
-        <div className="mt-4 flex justify-between">
+        <div className="modal-buttons">
           {isEditing ? (
             <>
-              <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-gray-400 text-white rounded">
-                Cancelar
+              <button
+                className="button-cancel"
+                type="button"
+                onClick={() => setIsEditing(false)}
+              >
+                Cancelar Edição
               </button>
-              <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded">
-                Salvar Alterações
+              <button
+                className="button"
+                type="submit"
+                onClick={handleSave}
+                disabled={isLoading}
+              >
+                {isLoading ? "Salvando..." : "Salvar Alterações"}
               </button>
             </>
           ) : (
-            <button onClick={() => setIsEditing(true)} className="px-4 py-2 bg-yellow-500 text-white rounded">
+            <button
+              className="button"
+              type="button"
+              onClick={() => setIsEditing(true)}
+            >
               Editar
             </button>
           )}
-          <button onClick={onClose} className="px-4 py-2 bg-gray-400 text-white rounded">
+          <button
+            className="button-cancel"
+            type="button"
+            onClick={onClose}
+          >
             Fechar
           </button>
         </div>
+
       </div>
     </div>
   );

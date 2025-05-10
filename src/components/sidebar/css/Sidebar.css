@@ -1,0 +1,40 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #e95e0c;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.sidebar nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  transition: background 0.3s ease;
+  font-family: Louis George Cafe, sans-serif;
+}
+
+.sidebar a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-left: 4px solid white;
+}

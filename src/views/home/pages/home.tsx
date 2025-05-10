@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../../api/authApi';
 
 import { HOME_ACIDENTE } from '../../acidente/routes';
@@ -6,8 +7,6 @@ import { HOME_BENEFICIO } from '../../beneficio/routes';
 import { HOME_ATTENDANCE } from '../../attendance/routes';
 import { HOME_PPE } from '../../ppe/routes';
 
-
-import { useNavigate } from 'react-router-dom';
 import './css/home.css';
 
 const Home = () => {
@@ -23,29 +22,36 @@ const Home = () => {
     }
   };
 
-  const handleNavigateToAccidents = () => {
-    navigate(HOME_ACIDENTE());
-  };
-
-  const handleNavigateToBenefits = () => {
-    navigate(HOME_BENEFICIO());
-  };
-
-  const handleNavigateToAttendance = () => {
-    navigate(HOME_ATTENDANCE());
-  };
-
-  const handleNavigateToPPE = () => {
-    navigate(HOME_PPE());
-  };
-
   return (
     <div className="container">
-      <h1>Bem-vindo à Home Page</h1>
-      <button className="button" onClick={handleNavigateToAccidents}>Acidentes</button>
-      <button className="button" onClick={handleNavigateToBenefits}>Benefícios</button>
-      <button className="button" onClick={handleNavigateToAttendance}>Frequência</button>
-      <button className="button" onClick={handleNavigateToPPE}>EPI's</button>
+      <img src="/path-to-your-hero-image.jpg" alt="Hero" className="hero-image" />
+
+      <div className="button-container">
+        <div className="button-wrapper">
+          <button className="button" onClick={() => navigate(HOME_ACIDENTE())}>
+            Acidentes
+          </button>
+        </div>
+
+        <div className="button-wrapper">
+          <button className="button" onClick={() => navigate(HOME_BENEFICIO())}>
+            Benefícios
+          </button>
+        </div>
+
+        <div className="button-wrapper">
+          <button className="button" onClick={() => navigate(HOME_ATTENDANCE())}>
+            Frequência
+          </button>
+        </div>
+
+        <div className="button-wrapper">
+          <button className="button" onClick={() => navigate(HOME_PPE())}>
+            EPI's
+          </button>
+        </div>
+      </div>
+
       <button className="button" onClick={handleLogout}>Logout</button>
     </div>
   );

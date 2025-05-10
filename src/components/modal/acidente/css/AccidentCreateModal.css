@@ -8,14 +8,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
 }
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
   text-align: center;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-content form {
@@ -34,4 +37,92 @@
   padding: 10px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.campo-titulo {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group textarea {
+  flex: 1;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+}
+
+.campo-div {
+  align-self: stretch;
+  height: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: #F2F2F2;
+  border-radius: 8px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+}
+
+.campo-input {
+  color: #1A1C1B;
+  font-size: 14px;
+  font-family: Louis George Cafe, sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  width: 100%;
+  border: none;
+  background: #F2F2F2;
+}
+
+.campo-input:focus-visible {
+  outline: none;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.button-cancel {
+  padding: 8px 16px;
+  background-color: white;
+  color: #e95e0c;
+  border: 1px solid #e95e0c;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.color-orange {
+  color: #e95e0c;
+}
+
+.ta-left {
+  text-align: left;
+  width: 100%;
 }

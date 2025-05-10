@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { updateAttendanceRecord } from "../../../api/attendanceApi";
 import { UpdateAttendanceRecord } from "../../../interfaces/attendance-interface";
 
@@ -23,6 +23,9 @@ const AttendanceDetailsModal: React.FC<AttendanceDetailsModalProps> = ({ record,
     comments: record.comments,
   });
 
+  const [isEditing, setIsEditing] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData({
@@ -41,62 +44,257 @@ const AttendanceDetailsModal: React.FC<AttendanceDetailsModalProps> = ({ record,
 
       await updateAttendanceRecord(record.id, formData);
       alert("Registro de frequência atualizado com sucesso!");
-      onClose();
+      setIsEditing(false);
     } catch (error) {
       alert(error instanceof Error ? error.message : "Erro ao atualizar o registro");
     }
   };
+  
+  const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      onClose();
+    }
+  };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-container">
-        <h2>Editar Registro de Frequência</h2>
+    <div className="modal-overlay" onClick={handleClickOutside}>
+      <div className="modal-content" ref={modalRef}>
+        <h2 className="font-bold mb-30 color-orange ta-left">Editar Registro de Frequência</h2>
         <form onSubmit={handleSubmit}>
-          <label>CPF do Funcionário:</label>
-          <input type="text" name="employeeCpf" value={record.employeeCpf} disabled />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">CPF do Funcionário</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="employeeCpf"
+                  value={record.employeeCpf}
+                  disabled
+                  className="campo-input"
+                />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">CNPJ da Empresa</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="companyCnpj"
+                  value={record.companyCnpj}
+                  disabled
+                  className="campo-input"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>CNPJ da Empresa:</label>
-          <input type="text" name="companyCnpj" value={record.companyCnpj} disabled />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Período de Referência</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="referencePeriod"
+                  value={formData.referencePeriod}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite o Período de Referência"
+                />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Área</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="area"
+                  value={formData.area}
+                  onChange={handleChange}
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite a Área"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Período de Referência:</label>
-          <input type="text" name="referencePeriod" value={formData.referencePeriod} onChange={handleChange} required />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Cargo</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="jobTitle"
+                  value={formData.jobTitle}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite o Cargo"
+                />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Descrição da Falta</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="absenceDescription"
+                  value={formData.absenceDescription}
+                  onChange={handleChange}
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite a Descrição da Falta"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Área:</label>
-          <input type="text" name="area" value={formData.area} onChange={handleChange} />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Situação</div>
+              <div className="campo-div">
+                <input
+                  type="text"
+                  name="situation"
+                  value={formData.situation}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite a Situação"
+                />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Dias Trabalhados</div>
+              <div className="campo-div">
+                <input
+                  type="number"
+                  name="workDays"
+                  value={formData.workDays}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite os Dias Trabalhados"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Cargo:</label>
-          <input type="text" name="jobTitle" value={formData.jobTitle} onChange={handleChange} required />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Faltas</div>
+              <div className="campo-div">
+                <input
+                  type="number"
+                  name="absences"
+                  value={formData.absences}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite as Faltas"
+                />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Dias de Afastamento Médico</div>
+              <div className="campo-div">
+                <input
+                  type="number"
+                  name="medicalLeaveDays"
+                  value={formData.medicalLeaveDays}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite os Dias de Afastamento Médico"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Descrição da Falta:</label>
-          <input type="text" name="absenceDescription" value={formData.absenceDescription} onChange={handleChange} />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Dias Extras</div>
+              <div className="campo-div">
+                <input
+                  type="number"
+                  name="extraDays"
+                  value={formData.extraDays}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite os Dias Extras"
+                />
+              </div>
+            </div>
+            <div className="input-container">
+              <div className="campo-titulo">Faltas Justificadas</div>
+              <div className="campo-div">
+                <input
+                  type="number"
+                  name="justifiedAbsenceDays"
+                  value={formData.justifiedAbsenceDays}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite as Faltas Justificadas"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Situação:</label>
-          <input type="text" name="situation" value={formData.situation} onChange={handleChange} required />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Dias Efetivamente Trabalhados</div>
+              <div className="campo-div">
+                <input
+                  type="number"
+                  name="workedDays"
+                  value={formData.workedDays}
+                  onChange={handleChange}
+                  required
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Digite os Dias Efetivamente Trabalhados"
+                />
+              </div>
+            </div>
+          </div>
 
-          <label>Dias Trabalhados:</label>
-          <input type="number" name="workDays" value={formData.workDays} onChange={handleChange} required />
-
-          <label>Faltas:</label>
-          <input type="number" name="absences" value={formData.absences} onChange={handleChange} required />
-
-          <label>Dias de Afastamento Médico:</label>
-          <input type="number" name="medicalLeaveDays" value={formData.medicalLeaveDays} onChange={handleChange} required />
-
-          <label>Dias Extras:</label>
-          <input type="number" name="extraDays" value={formData.extraDays} onChange={handleChange} required />
-
-          <label>Faltas Justificadas:</label>
-          <input type="number" name="justifiedAbsenceDays" value={formData.justifiedAbsenceDays} onChange={handleChange} required />
-
-          <label>Dias Efetivamente Trabalhados:</label>
-          <input type="number" name="workedDays" value={formData.workedDays} onChange={handleChange} required />
-
-          <label>Comentários:</label>
-          <textarea name="comments" value={formData.comments} onChange={handleChange} />
+          <div className="input-group">
+            <div className="input-container">
+              <div className="campo-titulo">Comentários</div>
+              <div className="campo-div">
+                <textarea
+                  name="comments"
+                  value={formData.comments}
+                  onChange={handleChange}
+                  disabled={!isEditing} // Desabilita se não estiver em modo de edição
+                  className="campo-input"
+                  placeholder="Comentários"
+                ></textarea>
+              </div>
+            </div>
+          </div>
 
           <div className="modal-buttons">
-            <button type="submit">Salvar</button>
-            <button type="button" onClick={onClose}>Cancelar</button>
+            {isEditing ? (
+              <>
+                <button className="button" type="submit">Salvar</button>
+                <button className="button-cancel" type="button" onClick={() => setIsEditing(false)}>Cancelar</button>
+              </>
+            ) : (
+              <button className="button" type="button" onClick={() => setIsEditing(true)}>Editar</button>
+            )}
+            <button className="button-cancel" type="button" onClick={onClose}>Fechar</button>
           </div>
         </form>
       </div>

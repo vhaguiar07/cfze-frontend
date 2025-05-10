@@ -63,16 +63,20 @@ export const searchAccidentsByEmployeeName = async (fullName: string, page = 1, 
 
 export const createAccidentCost = async (accidentCostData: any) => {
   try {
+    console.log('Enviando requisição para cadastrar custo do acidente:', accidentCostData);
     const response = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}/accident-cost/create`,
       accidentCostData,
       { withCredentials: true }
     );
+    console.log('Resposta recebida:', response.data);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      console.error('Erro na requisição:', error.response?.data);
       throw new Error(error.response?.data?.message || 'Erro ao cadastrar custo do acidente');
     } else {
+      console.error('Erro desconhecido:', error);
       throw new Error('Erro desconhecido');
     }
   }
